@@ -1,11 +1,12 @@
 const loadAllPost = async (query) =>{
+    toggleLoadingSpinner(true);
     const url = ` https://openapi.programming-hero.com/api/retro-forum/posts${query}`
     const res = await fetch(url);
     const data =await res.json(); 
     const cards =data.posts;
     // console.log(cards)
     loadAllCard(cards)
-    toggleLoadingSpinner(true);
+    
 }
 
 
@@ -13,6 +14,7 @@ const loadAllPost = async (query) =>{
 
 const loadAllCard = cards =>{
     const section2Container =document.getElementById('section2-card-container')
+     section2Container.textContent="";
      cards.forEach(card =>{
         // console.log(card)
        const cardSlot = document.createElement('div');
@@ -60,7 +62,7 @@ const loadAllCard = cards =>{
        section2Container.appendChild(cardSlot)
        
      })
-     
+     toggleLoadingSpinner(false);
 }
 
 const handleSearchClick = () =>{
@@ -68,7 +70,7 @@ const handleSearchClick = () =>{
     const searchText =inputValue.value;
     console.log(searchText)
 
-    loadAllPost(`/category/=${searchText}`)
+    loadAllPost(`/category/${searchText}`)
     
    
     
@@ -129,6 +131,8 @@ const secondCardData = (cord2) =>{
     cord2.forEach(cords2=> {
              console.log(cords2)
         const cardSlot2 =document.createElement('div')
+        const postedDate = cords2.author.posted_date ? cords2.author.posted_date : 'Date Not Found';
+        const authorDesignation =cords2.author.designation  ? cords2.author.designation : 'Name Not Found';
         cardSlot2.classList=`mx-8 mt-20 border w-80 p-4 shadow-lg rounded-xl  `
         cardSlot2.innerHTML=`
                  <div class="bg-slate-300  rounded-2xl">
@@ -136,7 +140,7 @@ const secondCardData = (cord2) =>{
                 </div>
                 <div class="flex mt-4 mb-3 gap-3">
                     <div><i class="fa-regular fa-calendar"></i></div>
-                    <div>${cords2.author.posted_date}</div>
+                    <div>${postedDate}</div>
                 </div>
                 <div>
                     <h3 class="text-black font-bold text-1xl">What will a mars habitat force that impact in our daily life!!!</h3>
@@ -145,7 +149,7 @@ const secondCardData = (cord2) =>{
                         <div class="h-16 w-16 "><img class ="rounded-full" src="${cords2.profile_image}" alt=""></div>
                         <div>
                             <div class="text-black font-bold">${cords2.author.name}</div>
-                            <div class="text-slate-500">${cords2.author.designation}</div>
+                            <div class="text-slate-500">${authorDesignation}</div>
                         </div>
                     </div>
                 </div>
